@@ -96,7 +96,7 @@ public class Principal {
         tareas.add(new Tarea(sc.nextLine(), LocalDateTime.now()));
     }
     
-    static void operarOrden(String orden, List<Tarea> lista) {
+    static void operarOrden(String orden, List<Tarea> lista) { //implementación propia con temas de la clase del método sort() usado
         switch (orden) {
             case "Última modificación" -> {
                 lista.sort(Comparator.comparing(Tarea::getModificacion).reversed());
@@ -110,7 +110,7 @@ public class Principal {
         }
     }
     
-    static String operarFiltro(String filtro, List<Tarea> lista) {
+    static String operarFiltro(String filtro, List<Tarea> lista) { //implementación propia con temas de la clase del método removeIf() usado
         String filtrado = null;
         switch (filtro) {
             case "Ninguno" -> {
