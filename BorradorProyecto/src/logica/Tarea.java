@@ -61,15 +61,6 @@ public class Tarea implements Serializable {
         this.modificacion = modificacion;
     }
     
-    
-    /*public List<String> get2SubtareasSinCompletar() {
-        List<String> aux = new ArrayList(subtareasSinCompletar);
-        for (String subtareaCompleta : subtareasCompletas) {
-            aux.add(subtareaCompleta);
-        }
-        return aux;
-    }//*/
-    
     public String imprimirFecha() {
         return fecha.getDayOfMonth() + "/" + fecha.getMonthValue();
     }
@@ -83,24 +74,13 @@ public class Tarea implements Serializable {
             subtareasSinCompletar.set(subtareasSinCompletar.indexOf(subtarea), descripcion);
             return;
         }
-        
         subtareasCompletas.set(subtareasCompletas.indexOf(subtarea), descripcion);
-        
-        /*if (eliminarSubtarea(subtarea)) {
-            System.out.println("Completo");
-            subtareasCompletas.add(subtarea);
-        } else {
-            System.out.println("Sin completar");
-            subtareasSinCompletar.add(subtarea);
-        }//*/
     }
     
     public String marcarSubtarea(String subtarea) {
         if (subtareasCompletas.contains(subtarea)) return "La subtarea ya está completa";
         subtareasSinCompletar.remove(subtarea);
         subtareasCompletas.add(subtarea);
-        //if (subtareasSinCompletar.isEmpty()) return "Tarea completa al completar todas sus subtareasSinCompletar";
-        
         return "Subtarea marcada como completa";
     }
 
@@ -121,7 +101,5 @@ public class Tarea implements Serializable {
         subtareasSinCompletar.remove(subtarea);
         completo = subtareasCompletas.remove(subtarea);
         return completo;
-        //return subtareasCompletas.remove(subtarea);
     }
-    
 }

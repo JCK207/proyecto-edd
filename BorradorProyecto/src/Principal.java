@@ -22,8 +22,6 @@ public class Principal {
     }};
     
     public static void main(String[] args) {
-        
-        //generación aleatoria
         LocalDateTime fechaActual = LocalDateTime.now().minusWeeks(2);
         for (int i=1; i<=10; i++) {
             int random = (int)(Math.random()*3+3);
@@ -48,7 +46,7 @@ public class Principal {
             }
                 
             tareas.add(tarea);
-        }//*/
+        }
         
         System.out.println("GESTIÓN DE TAREAS");
         
@@ -96,7 +94,7 @@ public class Principal {
         tareas.add(new Tarea(sc.nextLine(), LocalDateTime.now()));
     }
     
-    static void operarOrden(String orden, List<Tarea> lista) { //implementación propia con temas de la clase del método sort() usado
+    static void operarOrden(String orden, List<Tarea> lista) { 
         switch (orden) {
             case "Última modificación" -> {
                 lista.sort(Comparator.comparing(Tarea::getModificacion).reversed());
@@ -110,7 +108,7 @@ public class Principal {
         }
     }
     
-    static String operarFiltro(String filtro, List<Tarea> lista) { //implementación propia con temas de la clase del método removeIf() usado
+    static String operarFiltro(String filtro, List<Tarea> lista) {
         String filtrado = null;
         switch (filtro) {
             case "Ninguno" -> {
@@ -118,9 +116,9 @@ public class Principal {
             }
             case "Fecha" -> {
                 System.out.println("Buscar desde:");
-                //mirar si "Enter para año actual: " + LocalDateTime.now().getYear();
+                
                 System.out.print("Día: ");
-                int dia = sc.nextInt(); //leerEnRango() o similar
+                int dia = sc.nextInt();
                 System.out.print("Mes: ");
                 int mes = sc.nextInt();
                 LocalDateTime desde = LocalDateTime.of(LocalDateTime.now().getYear(), mes, dia, 0, 0);
@@ -142,7 +140,6 @@ public class Principal {
             }
             case "Descripción" -> {
                 System.out.print("Buscar palabra: ");
-                //sc.nextLine();
                 String palabra = sc.nextLine().toLowerCase();
                 filtrado = ": " + palabra;
                 
@@ -334,9 +331,9 @@ public class Principal {
                     }
                     case 5 -> {
                         System.out.println("Fecha a entregar:");
-                        //mirar si "Enter para año actual: " + LocalDateTime.now().getYear();
+                        
                         System.out.print("Día: ");
-                        int dia = sc.nextInt(); //leerEnRango() o similar
+                        int dia = sc.nextInt(); 
                         System.out.print("Mes: ");
                         int mes = sc.nextInt();
                         sc.nextLine();
@@ -398,9 +395,7 @@ public class Principal {
         }
     }
     
-    static void salir() {
-        //Agregar menú
-        
+    static void salir() {  
     }
     
     static void imprimirLista(List lista) {
@@ -418,7 +413,7 @@ public class Principal {
                 String expirado = "";
                 if (tareas.contains(tarea) && LocalDateTime.now().isAfter(tarea.getFecha()))
                     expirado = " Expirada";
-                
+          
                 System.out.println("Fecha: " + tarea.imprimirFecha() + expirado);
             }
             
@@ -447,7 +442,7 @@ public class Principal {
             if (seleccion==0) return null;
             if (seleccion<0 || seleccion>lista.size()) System.out.println("Selección no válida");
         } while (seleccion<0 || seleccion>lista.size());
-        return lista.get(seleccion-1); //se requiere un cast de la clase de llegada al llamar el método
+        return lista.get(seleccion-1);
     }
     
 }
