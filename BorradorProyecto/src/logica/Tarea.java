@@ -81,7 +81,7 @@ public class Tarea implements Serializable {
     }
     
     public String marcarSubtarea(String subtarea) {
-        if (subtareasCompletas.contains(subtarea)) return "La subtarea ya está completa";
+        if (subtareasCompletas.contains(subtarea)) return "La subtarea ya estï¿½ completa";
         subtareasSinCompletar.remove(subtarea);
         subtareasCompletas.add(subtarea);
         
@@ -89,7 +89,7 @@ public class Tarea implements Serializable {
     }
 
     public String desmarcarSubtarea(String subtarea) {
-        if (subtareasSinCompletar.contains(subtarea)) return "La subtarea no está completa";
+        if (subtareasSinCompletar.contains(subtarea)) return "La subtarea no estï¿½ completa";
         agregarSubtarea(subtarea);
         subtareasCompletas.remove(subtarea);
         
