@@ -15,24 +15,53 @@ public class Principal {
     static final String ARCHIVO_COMPLETAS = "completas.gestor";
     
     static List<String> ordenes = new ArrayList() {{
-        add("ï¿½ltima modificaciï¿½n");
+        add("Última modificación");
         add("Prioridad");
-        add("Alfabï¿½tico");
+        add("Alfabético");
     }};
     static List<String> filtros = new ArrayList() {{
         add("Ninguno");
         add("Fecha");
-        add("Descripciï¿½n");
+        add("Descripción");
     }};
     
     public static void main(String[] args) {
         tareas = (List<Tarea>)ArchivosConexion.leer(ARCHIVO_TAREAS);
         tareasCompletas = (List<Tarea>)ArchivosConexion.leer(ARCHIVO_COMPLETAS);
         
-        if (tareas==null) tareas = new ArrayList();
+        if (tareas==null) {
+            tareas = new ArrayList();
+            //generación aleatoria
+            /*LocalDateTime fechaActual = LocalDateTime.now().minusWeeks(2);
+            for (int i=1; i<=5; i++) {
+                int random = (int)(Math.random()*3+3);
+                char letra = (char)(Math.random()*26+65);
+                char[] letras = new char[random*4];
+                letras[1] = letra;
+                for (int j=2; j<random*4-2; j++) {
+                    letra = (char)(Math.random()*26+97);
+                    letras[j] = letra;
+                }
+                String palabra = new String(letras);
+                Tarea tarea = new Tarea(palabra, LocalDateTime.now());
+
+                if (random>1)
+                    tarea.setFecha(fechaActual.plusDays((long)(Math.random()*30+1)));
+
+                if (random==3) {
+                    String[] palabras = palabra.split(letras[i]+"");
+                    for (String p : palabras) {
+                        tarea.agregarSubtarea(p);
+                    }
+                }
+
+                tareas.add(tarea);
+            }//*/
+        }
         if (tareasCompletas==null) tareasCompletas = new ArrayList();
-        System.out.println("GESTIï¿½N DE TAREAS");
+                
         
+        System.out.println("GESTIÓN DE TAREAS");
         int opcion;
         do {
             System.out.println();
@@ -40,7 +69,7 @@ public class Principal {
             System.out.println("1. Crear Tarea");
             System.out.println("2. Ver Tareas");
             System.out.println("3. Ver Tareas Completas");
-            System.out.print("Selecciï¿½n: ");
+            System.out.print("Selección: ");
             opcion = sc.nextInt();
             sc.nextLine();
             
@@ -69,7 +98,7 @@ public class Principal {
                 }
                 default -> {
                     System.out.println();
-                    System.out.println("Selecciï¿½n no vï¿½lida");
+                    System.out.println("Selección no válida");
                 }
             }
         } while (opcion!=0);
@@ -78,7 +107,7 @@ public class Principal {
     
     static void crearTarea() {
         System.out.println();
-        System.out.print("Descripciï¿½n de la tarea: ");
+        System.out.print("Descripción de la tarea: ");
         tareas.add(new Tarea(sc.nextLine(), LocalDateTime.now()));
         System.out.println("Tarea creada");
     }
@@ -87,13 +116,13 @@ public class Principal {
         Comparator<Tarea> comparador = null;
         
         switch (orden) {
-            case "ï¿½ltima modificaciï¿½n" -> {
+            case "Última modificación" -> {
                 comparador = Comparator.comparing(Tarea::getModificacion).reversed();
             }
             case "Prioridad" -> {
                 comparador = Comparator.comparing(Tarea::getFecha, Comparator.nullsLast(Comparator.naturalOrder()));
             }
-            case "Alfabï¿½tico" -> {
+            case "Alfabético" -> {
                 comparador = Comparator.comparing(Tarea::getDescripcion);
             }
         }
@@ -112,14 +141,14 @@ public class Principal {
             case "Fecha" -> {
                 System.out.println();
                 System.out.println("Buscar desde:");
-                System.out.print("Dï¿½a: ");
+                System.out.print("Día: ");
                 int dia = sc.nextInt();
                 System.out.print("Mes: ");
                 int mes = sc.nextInt();
                 LocalDateTime desde = LocalDateTime.of(LocalDateTime.now().getYear(), mes, dia, 0, 0);
                 
                 System.out.println("Buscar hasta:");
-                System.out.print("Dï¿½a: ");
+                System.out.print("Día: ");
                 dia = sc.nextInt();
                 System.out.print("Mes: ");
                 mes = sc.nextInt();
@@ -133,7 +162,7 @@ public class Principal {
                 filtrado = " Desde: " + desde.getDayOfMonth() + "/" + desde.getMonthValue() + " Hasta: " + hasta.getDayOfMonth() + "/" + hasta.getMonthValue();
                 lista.removeIf(tarea -> (tarea.getFecha()==null || (tarea.getFecha().isBefore(desde) || tarea.getFecha().isAfter(hasta))));
             }
-            case "Descripciï¿½n" -> {
+            case "Descripción" -> {
                 System.out.println();
                 System.out.print("Buscar palabra: ");
                 String palabra = sc.nextLine().toLowerCase();
@@ -147,7 +176,7 @@ public class Principal {
     
     static List<Tarea> verTareas(List<Tarea> lista, String nombreLista) {
         List<Tarea> auxTareas = new ArrayList(lista);
-        String orden = "ï¿½ltima modificaciï¿½n";
+        String orden = "Última modificación";
         String filtro = "Ninguno";
         String filtrado = "";
         operarOrden(orden, auxTareas);
@@ -172,14 +201,14 @@ public class Principal {
             System.out.print("1) Modificar tarea ");
             System.out.print("2) Ordenar ");
             System.out.println("3) Filtrar");
-            System.out.print("Selecciï¿½n: ");
+            System.out.print("Selección: ");
             opcion = sc.nextInt();
             System.out.println();
             sc.nextLine();
             
             switch (opcion) {
                 case 0 -> {
-                    System.out.println("Volviendo al Menï¿½ Principal");
+                    System.out.println("Volviendo al Menú Principal");
                 }
                 case 1 -> {
                     return auxTareas;
@@ -208,132 +237,143 @@ public class Principal {
                     
                 }
                 default -> {
-                    System.out.println("Selecciï¿½n no vï¿½lida");
+                    System.out.println("Selección no válida");
                 }
             }
         } while (opcion!=0);
+        
         return null;
+    }
+    
+    static void completarTarea(Tarea tarea) {
+        if (tarea.getFecha()!=null && tarea.getFecha().isBefore(LocalDateTime.now()))
+            tarea.setFecha(null);
+        
+        tarea.marcarSubtareas();
+        
+        tareas.remove(tarea);
+        tareasCompletas.add(tarea);
     }
     
     static void modificarTareas(List<Tarea> lista, String nombreLista) {
         List<Tarea> auxTareas;
         while ((auxTareas = verTareas(lista, nombreLista))!=null) {
-            int opcion = 1;
             System.out.println("Seleccione una tarea para modificar");
             Tarea tarea = (Tarea)seleccionarDeLista(auxTareas);
             
-            while (opcion!=0 && tarea!=null) {
-                System.out.println();
-                System.out.println("0. Volver");
-                System.out.println("1. Marcar como completa");
-                System.out.println("2. Agregar subtarea");
-                System.out.println("3. Modificar subtarea");
-                System.out.println("4. Modificar descripciï¿½n");
-                System.out.println("5. Modificar Fecha de entrega");
-                System.out.print("Selecciï¿½n: ");
-                opcion = sc.nextInt();
-                sc.nextLine();
-                System.out.println();
+            if (tarea!=null) {
+                int opcion;
+                do {
+                    System.out.println();
+                    System.out.println("0. Volver");
+                    System.out.println("1. Marcar como completa");
+                    System.out.println("2. Agregar subtarea");
+                    System.out.println("3. Modificar subtarea");
+                    System.out.println("4. Modificar descripción");
+                    System.out.println("5. Modificar Fecha de entrega");
+                    System.out.print("Selección: ");
+                    opcion = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println();
 
-                switch (opcion) {
-                    case 0 -> System.out.println("Volviendo");
-                    case 1 -> {
-                        tareas.remove(tarea);
-                        tareasCompletas.add(tarea);
-                        if (tarea.getFecha()!=null && tarea.getFecha().isBefore(LocalDateTime.now()))
-                            tarea.setFecha(LocalDateTime.now());
-                        
-                        System.out.println("Tarea marcada como completa");
-                        
-                        opcion = 0;
-                    }
-                    case 2 -> {
-                        System.out.print("Descripciï¿½n de subtarea: ");
-                        System.out.println(tarea.agregarSubtarea(sc.nextLine()));
-                    }
-                    case 3 -> {
-                        int op;
-                        List<String> subtareas = tarea.getSubtareas();
-                        if (subtareas.isEmpty()) {
-                            System.out.println("No hay subtareas");
-                        } else {
-                            for (int i=0; i<subtareas.size(); i++) {
-                                if (i<tarea.getSubtareasSinCompletar().size()) {
-                                    System.out.println("[ ] " + (i+1) + ". " + subtareas.get(i));
-                                } else {
-                                    System.out.println("[X] " + (i+1) + ". " + subtareas.get(i));
-                                }
-                            }
-                            System.out.println();
-                            System.out.println("Seleccione una subtarea para modificar");
-                            String subtarea = (String)seleccionarDeLista(subtareas);
+                    switch (opcion) {
+                        case 0 -> System.out.println("Volviendo");
+                        case 1 -> {
+                            completarTarea(tarea);
+                            System.out.println("Tarea marcada como completa");
                             
-                            if (subtarea!=null) {
-                                System.out.println();
-                                System.out.println("0. Volver");
-                                System.out.println("1. Marcar como completa");
-                                System.out.println("2. Desmarcar como completa");
-                                System.out.println("3. Modificar descripciï¿½n");
-                                System.out.println("4. Eliminar subtarea");
-                                System.out.print("Selecciï¿½n: ");
-                                op = sc.nextInt();
-                                sc.nextLine();
-                                System.out.println();
-                                
-                                switch (op) {
-                                    case 0 -> System.out.println("Volviendo");
-                                    case 1 -> {
-                                        System.out.println(tarea.marcarSubtarea(subtarea));
-                                    }
-                                    case 2 -> {
-                                        System.out.println(tarea.desmarcarSubtarea(subtarea));
-                                    }
-                                    case 3 -> {
-                                        System.out.print("Descripciï¿½n de la subtarea: ");
-                                        String descripcion = sc.nextLine();
-                                        tarea.modificarSubtarea(subtarea, descripcion);
-                                    }
-                                    case 4 -> {
-                                        System.out.println(tarea.eliminarSubtarea(subtarea));
-                                    }
-                                    default -> System.out.println("Selecciï¿½n no vï¿½lida");
-                                }
-                                if (tarea.getSubtareasSinCompletar().isEmpty()) {
-                                    opcion = 0;
-                                    if (tarea.getSubtareasCompletas().isEmpty()) {
-                                        System.out.println("No quedan subtareas");
+                            opcion = 0;
+                        }
+                        case 2 -> {
+                            System.out.print("Descripción de subtarea: ");
+                            System.out.println(tarea.agregarSubtarea(sc.nextLine()));
+                        }
+                        case 3 -> {
+                            List<String> subtareas = tarea.getSubtareas();
+                            if (subtareas.isEmpty()) {
+                                System.out.println("No hay subtareas");
+                            } else {
+                                for (int i=0; i<subtareas.size(); i++) {
+                                    if (i<tarea.getSubtareasSinCompletar().size()) {
+                                        System.out.println("[ ] " + (i+1) + ". " + subtareas.get(i));
                                     } else {
-                                        System.out.println("Tarea completa al quedar todas sus subtareas completas");
-                                        tareas.remove(tarea);
-                                        tareasCompletas.add(tarea);
-                                        if (tarea.getFecha()!=null && tarea.getFecha().isBefore(LocalDateTime.now()))
-                                            tarea.setFecha(LocalDateTime.now());
+                                        System.out.println("[X] " + (i+1) + ". " + subtareas.get(i));
                                     }
                                 }
-                                
+                                System.out.println();
+                                System.out.println("Seleccione una subtarea para modificar");
+                                String subtarea = (String)seleccionarDeLista(subtareas);
+
+                                if (subtarea!=null) {
+                                    int op;
+                                    System.out.println();
+                                    System.out.println("0. Volver");
+                                    System.out.println("1. Marcar como completa");
+                                    System.out.println("2. Desmarcar como completa");
+                                    System.out.println("3. Modificar descripción");
+                                    System.out.println("4. Eliminar subtarea");
+                                    System.out.print("Selección: ");
+                                    op = sc.nextInt();
+                                    sc.nextLine();
+                                    System.out.println();
+
+                                    switch (op) {
+                                        case 0 -> System.out.println("Volviendo");
+                                        case 1 -> {
+                                            System.out.println(tarea.marcarSubtarea(subtarea));
+                                        }
+                                        case 2 -> {
+                                            System.out.println(tarea.desmarcarSubtarea(subtarea));
+                                        }
+                                        case 3 -> {
+                                            System.out.print("Descripción de la subtarea: ");
+                                            String descripcion = sc.nextLine();
+                                            tarea.modificarSubtarea(subtarea, descripcion);
+                                        }
+                                        case 4 -> {
+                                            System.out.println(tarea.eliminarSubtarea(subtarea));
+                                        }
+                                        default -> System.out.println("Selección no válida");
+                                    }
+                                    
+                                    if (tarea.getSubtareasSinCompletar().isEmpty() && !tarea.getSubtareasCompletas().isEmpty()) {
+                                        completarTarea(tarea);
+                                        System.out.println("Tarea completa al quedar todas sus subtareas completas");
+                                        
+                                        opcion = 0;
+                                    }
+
+                                }
                             }
                         }
+                        case 4 -> {
+                            System.out.print("Descripcion de la tarea: ");
+                            tarea.setDescripcion(sc.nextLine());
+                        }
+                        case 5 -> {
+                            System.out.println("Fecha a entregar:");
+                            System.out.print("Día: ");
+                            int dia = sc.nextInt();
+                            System.out.print("Mes: ");
+                            int mes = sc.nextInt();
+                            sc.nextLine();
+                            
+                            try {
+                                tarea.setFecha(LocalDateTime.now().withDayOfMonth(dia).withMonth(mes));
+                            } catch(Exception ex) {
+                                System.out.println("Fecha inválida. Se modifica a \"Sin fecha\" por defecto");
+                                tarea.setFecha(null);
+                            }
+                        }
+                        default -> System.out.println("Selección no válida");
                     }
-                    case 4 -> {
-                        System.out.print("Descripcion de la tarea: ");
-                        tarea.setDescripcion(sc.nextLine());
+                    
+                    tarea.setModificacion(LocalDateTime.now());
+                    if (tareas.isEmpty()) {
+                        System.out.println("Se completaron todas las tareas");
+                        return;
                     }
-                    case 5 -> {
-                        System.out.println("Fecha a entregar:");
-                        System.out.print("Dï¿½a: ");
-                        int dia = sc.nextInt();
-                        System.out.print("Mes: ");
-                        int mes = sc.nextInt();
-                        sc.nextLine();
-                        tarea.setFecha(LocalDateTime.now().withDayOfMonth(dia).withMonth(mes));
-                    }
-                    default -> System.out.println("Selecciï¿½n no vï¿½lida");
-                }
-                tarea.setModificacion(LocalDateTime.now());
-                if (tareas.isEmpty()) {
-                    System.out.println("Se completaron todas las tareas");
-                    return;
-                }
+                } while (opcion!=0);
             }
         }
     }
@@ -341,44 +381,46 @@ public class Principal {
     static void modificarTareasCompletas(List<Tarea> lista, String nombreLista) {
         List<Tarea> auxTareas;
         while ((auxTareas = verTareas(lista, nombreLista))!=null) {
-            int opcion = 1;
             System.out.println("Seleccione una Tarea para modificar");
             Tarea tarea = (Tarea)seleccionarDeLista(auxTareas);
-            while (opcion!=0 && tarea!=null) {
-                System.out.println();
-                System.out.println("0. Volver");
-                System.out.println("1. Desmarcar como completa");
-                System.out.println("2. Eliminar tarea");
-                System.out.println("Selecciï¿½n: ");
-                opcion = sc.nextInt();
-                sc.nextLine();
-                System.out.println();
-                
-                switch(opcion){
-                    case 0 -> System.out.println("Volviendo a Ver Tareas Completas");
-                    case 1 -> {
-                        tareasCompletas.remove(tarea);
-                        tareas.add(tarea);
-                        tarea.desmarcarSubtareas();
-                        if (tarea.getFecha().isBefore(LocalDateTime.now()))
-                            tarea.setFecha(LocalDateTime.now());
-                        System.out.println("Tarea desmarcada como completa");
-                        
-                        opcion = 0;
+            
+            if (tarea!=null) {
+                int opcion;
+                do {
+                    System.out.println();
+                    System.out.println("0. Volver");
+                    System.out.println("1. Desmarcar como completa");
+                    System.out.println("2. Eliminar tarea");
+                    System.out.println("Selección: ");
+                    opcion = sc.nextInt();
+                    sc.nextLine();
+                    System.out.println();
+
+                    switch(opcion){
+                        case 0 -> System.out.println("Volviendo a Ver Tareas Completas");
+                        case 1 -> {
+                            tareasCompletas.remove(tarea);
+                            tareas.add(tarea);
+                            tarea.desmarcarSubtareas();
+                            System.out.println("Tarea desmarcada como completa");
+
+                            opcion = 0;
+                        }
+                        case 2 -> {
+                            tareasCompletas.remove(tarea);
+                            System.out.println("Tarea eliminada");
+
+                            opcion = 0;
+                        }
+                        default -> System.out.println("Selección no válida");
                     }
-                    case 2 -> {
-                        tareasCompletas.remove(tarea);
-                        System.out.println("Tarea eliminada");
-                        
-                        opcion = 0;
+                    
+                    tarea.setModificacion(LocalDateTime.now());
+                    if (tareasCompletas.isEmpty()) {
+                        System.out.println("No quedan tareas completas");
+                        return;
                     }
-                    default -> System.out.println("Selecciï¿½n no vï¿½lida");
-                }
-                tarea.setModificacion(LocalDateTime.now());
-                if (tareasCompletas.isEmpty()) {
-                    System.out.println("No quedan tareas completas");
-                    return;
-                }
+                } while (opcion!=0);
             }
         }
     }
@@ -427,11 +469,11 @@ public class Principal {
         System.out.println("0. Cancelar");
         System.out.println();
         do {
-            System.out.print("Selecciï¿½n: ");
+            System.out.print("Selección: ");
             seleccion = sc.nextInt();
             sc.nextLine();
             if (seleccion==0) return null;
-            if (seleccion<0 || seleccion>lista.size()) System.out.println("Selecciï¿½n no vï¿½lida");
+            if (seleccion<0 || seleccion>lista.size()) System.out.println("Selección no válida");
         } while (seleccion<0 || seleccion>lista.size());
         return lista.get(seleccion-1);
     }

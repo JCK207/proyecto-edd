@@ -6,7 +6,7 @@ import java.util.List;
 public class Arbol {
 
     private Nodo raiz;
-    private Comparator comparador;
+    private Comparator<Tarea> comparador;
 
     public Arbol(Comparator comparador) {
        this.comparador = comparador;
@@ -16,31 +16,31 @@ public class Arbol {
         raiz = this.insertar(raiz, dato);
     }
 
-    private Nodo insertar(Nodo padre, Tarea dato) {
-        if (padre == null) {
+    private Nodo insertar(Nodo nodo, Tarea dato) {
+        if (nodo == null) {
             return new Nodo(dato);
         }
         
-        if (comparador.compare(dato, padre.dato)<0) {
-            padre.izquierda = this.insertar(padre.izquierda, dato);
+        if (comparador.compare(dato, nodo.dato)<0) {
+            nodo.izquierda = this.insertar(nodo.izquierda, dato);
         } else {
-            padre.derecha = this.insertar(padre.derecha, dato);
+            nodo.derecha = this.insertar(nodo.derecha, dato);
         }
         
-        return padre;
-    }
-
-    private void inorden(Nodo n, List<Tarea> lista) {
-        if (n != null) {
-            this.inorden(n.izquierda, lista);
-            lista.add(n.dato);
-            this.inorden(n.derecha, lista);
-        }
+        return nodo;
     }
 
     public void inorden(List<Tarea> lista) {
         lista.clear();
         this.inorden(raiz, lista);
+    }
+
+    private void inorden(Nodo nodo, List<Tarea> lista) {
+        if (nodo!=null) {
+            this.inorden(nodo.izquierda, lista);
+            lista.add(nodo.dato);
+            this.inorden(nodo.derecha, lista);
+        }
     }
 
 }

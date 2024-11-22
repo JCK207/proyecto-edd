@@ -14,7 +14,7 @@ public class ArchivosConexion {
         try (FileOutputStream fileOut = new FileOutputStream(file);
             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
             out.writeObject(objeto);
-            //System.out.println("El objeto ha sido guardado en: datos/" + nombreArchivo);
+            System.out.println("Objeto guardado en: datos/" + nombreArchivo);
         } catch (IOException e) {
            //e.printStackTrace();
         }
@@ -28,7 +28,7 @@ public class ArchivosConexion {
             try (FileInputStream fileIn = new FileInputStream(file);
                 ObjectInputStream in = new ObjectInputStream(fileIn)) {
                 objeto = (Object) in.readObject();
-                //System.out.println("Objeto leÃ­do: " + objeto);
+                System.out.println("Objeto leído de: datos/" + nombreArchivo);
             } catch (IOException | ClassNotFoundException e) {
                 //e.printStackTrace();
             }
